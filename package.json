@@ -13,5 +13,8 @@
     "mariadb": "^2.2.0",
     "morgan": "^1.9.1",
     "sequelize": "^5.21.4"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^5.5.1"
   }
 }
