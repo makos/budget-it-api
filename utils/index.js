@@ -1,5 +1,5 @@
 function checkIfNullJSON(record) {
-    return record == null;
+  return record == null;
 }
 
 exports.checkIfNullJSON = checkIfNullJSON;
