@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
           allowNull: true,
           defaultValue: ''
       },
-      ExpenseType: {
+      RecordType: {
           type: DataTypes.ENUM('Income', 'Expense'),
           allowNull: false
       }
