@@ -28,8 +28,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM('Income', 'Expense'),
       allowNull: false,
     },
-    UserID: {
-      type: DataTypes.INTEGER,
+    UserName: {
+      type: DataTypes.STRING,
       allowNull: false,
       references: {
         model: 'Users',
@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false,
   });
   Record.associate = function(models) {
-    Record.belongsTo(models.User, {foreignKey: 'UserID'});
+    Record.belongsTo(models.User, {foreignKey: 'UserName'});
   };
   return Record;
 };

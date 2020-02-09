@@ -4,14 +4,21 @@ module.exports = (sequelize, DataTypes) => {
     ID: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
+      unique: true,
       autoIncrement: true,
     },
-    Name: DataTypes.STRING,
-    Password: DataTypes.STRING,
+    Name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      primaryKey: true,
+    },
+    Password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   }, {});
   User.associate = function(models) {
-    User.hasMany(models.Record, {as: 'Records', foreignKey: 'UserID'});
+    User.hasMany(models.Record, { foreignKey: 'UserName' });
   };
   return User;
 };

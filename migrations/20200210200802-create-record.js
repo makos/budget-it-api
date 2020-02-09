@@ -30,12 +30,12 @@ module.exports = {
         type: Sequelize.ENUM('Income', 'Expense'),
         allowNull: false,
       },
-      UserID: {
-        type: Sequelize.INTEGER,
+      UserName: {
+        type: Sequelize.STRING,
         allowNull: false,
         references: {
           model: 'Users',
-          key: 'ID',
+          key: 'Name',
         },
       },
     });
