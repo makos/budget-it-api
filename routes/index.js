@@ -1,27 +1,34 @@
 var express = require('express');
 var router = express.Router();
 var models = require('../models');
-var { checkIfNullJSON } = require('../utils');
+var getRecords = require('./get_records');
 
-/* GET home page. */
 router.get('/', function(req, res, next) {
-    models.Record.findAll().then(records => {
-        if (!checkIfNullJSON(records)) {
-            res.status(200).json(records);
-        } else {
-            res.status(404).json({ "msg": "no data" });
-        }
-    })
+    return res.status(404).json({ "msg": "no data" });
 });
 
-router.get('/:id', function(req, res, next) {
+router.get('/api/:id', function(req, res, next) {
     models.Record.findByPk(req.params.id).then(record => {
-        if (!checkIfNullJSON(record)) {
-            res.status(200).json(record);
+        if (record == null) {
+            return res.status(404).json({ "msg": "no data" });
         } else {
-            res.status(404).json({ "msg": "no data" });
+            return res.status(200).json(record);
         }
-    })
-})
+    });
+});
+
+router.get('/api', function(req, res, next) {
+    if (req.query.limit !== undefined) {
+        req.limitNumber = Number(req.query.limit);
+
+        if (Number.isNaN(req.limitNumber)) {
+            return res.status(404).json({ "msg": "wrong query" });
+        }
+    }
+
+    next();   
+});
+
+router.use(getRecords);
 
 module.exports = router;
