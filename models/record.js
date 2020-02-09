@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false,
   });
   Record.associate = function(models) {
-    Record.belongsTo(models.User, { foreignKey: 'UserID' });
+    Record.belongsTo(models.User, {foreignKey: 'UserID'});
   };
   return Record;
 };

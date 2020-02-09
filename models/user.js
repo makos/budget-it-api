@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     Password: DataTypes.STRING,
   }, {});
   User.associate = function(models) {
-    User.hasMany(models.Record, { as: 'Records', foreignKey: 'UserID' });
+    User.hasMany(models.Record, {as: 'Records', foreignKey: 'UserID'});
   };
   return User;
 };
