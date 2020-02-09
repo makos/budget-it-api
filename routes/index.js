@@ -9,4 +9,10 @@ router.get('/', function(req, res, next) {
     })
 });
 
+router.get('/:id', function(req, res, next) {
+    models.Record.findByPk(req.params.id).then(record => {
+        res.json(record);
+    })
+})
+
 module.exports = router;
