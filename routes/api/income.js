@@ -4,42 +4,38 @@ const models = require('../../models');
 const { Op } = require('sequelize');
 
 router.get('/', function(req, res, next) {
-  // /api/income?limit=[INTEGER] to limit number of returned records.
-  if (req.query.limit !== undefined) {
-    req.limitNumber = Number(req.query.limit);
+  let searchClause = { where: { RecordType: 'Income' } };
 
-    if (Number.isNaN(req.limitNumber)) {
+  // /api/income?limit=[INTEGER] to limit number of returned records.
+  if (req.query.limit) {
+    searchClause.limit = Number(req.query.limit);
+
+    if (Number.isNaN(searchClause.limit)) {
       return res.status(404).json({'msg': 'wrong query'});
     }
   }
 
   // /api/income?dateFrom=[DATESTRING]&dateTo=[DATESTRING] to filter based on
   // dates.
-  if (req.query.dateFrom !== undefined && req.query.dateTo !== undefined) {
-    req.dateFrom = new Date(req.query.dateFrom);
-    req.dateTo = new Date(req.query.dateTo);
+  if (req.query.dateFrom && req.query.dateTo) {
+    const dateFrom = new Date(req.query.dateFrom);
+    const dateTo = new Date(req.query.dateTo);
 
-    if (req.dateFrom == "Invalid Date" || req.dateTo == "Invalid Date") {
+    if (dateFrom == "Invalid Date" || dateTo == "Invalid Date") {
       return res.status(404).json({'msg': 'wrong query'});
     }
+
+    searchClause.where.Date = {[Op.between]: [dateFrom, dateTo]};
   }
 
-  models.Record.findAll({
-    where: {
-      RecordType: 'Income',
-      Date: {
-        [Op.between]: [req.dateFrom, req.dateTo],
-      },
-    },
-    limit: req.limitNumber}).then((records) => {
-    if (records == null) {
+  models.Record.findAll(searchClause).then((records) => {
+    if (!records) {
       return res.status(404).json({msg: 'no data'});
     } else {
       return res.status(200).json(records);
     }
   });
 });
-
 
 router.get('/:id', function(req, res, next) {
   models.Record.findOne({
@@ -48,12 +44,16 @@ router.get('/:id', function(req, res, next) {
       RecordType: 'Income',
     },
   }).then((record) => {
-    if (record == null) {
+    if (!record) {
       return res.status(404).json({msg: 'no data'});
     } else {
       return res.status(200).json(record);
     }
   });
+});
+
+router.post('/', function(req, res, next) {
+  res.status(200);
 });
 
 module.exports = router;
