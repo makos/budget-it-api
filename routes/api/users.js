@@ -10,9 +10,9 @@ router.get('/', function(req, res, next) {
 
 router.get('/:name', function(req, res, next) {
   models.User.findOne({
-    where: { Name: req.params.name },
-    attributes: [ 'ID', 'Name' ],
-    include: [ models.Record ],
+    where: {Name: req.params.name},
+    attributes: ['ID', 'Name'],
+    include: [models.Record],
   }).then((user) => {
     return res.status(200).json(user);
   });
