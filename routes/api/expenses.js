@@ -75,4 +75,35 @@ router.post('/', function(req, res, next) {
   }
 });
 
+router.put('/:id', function(req, res, next) {
+  models.Record.findOrCreate({
+    where: {
+      RecordID: req.params.id,
+      RecordType: 'Expense',
+    },
+    defaults: {
+      Amount: req.body.amount,
+      Date: req.body.date || new Date(),
+      Type: req.body.type,
+      Comment: req.body.comment,
+      RecordType: 'Expense',
+      UserName: 'makos',
+    },
+  }).then(([record, created]) => {
+    if (created) {
+      return res.status(201).json({'created': record});
+    } else {
+      record.update({
+        Amount: req.body.amount || record.Amount,
+        Date: req.body.date || record.Date,
+        Type: req.body.type || record.Type,
+        Comment: req.body.comment || record.Comment,
+      });
+      return res.status(200).json({'updated': record});
+    }
+  }, (err) => {
+    res.status(500).json({'error': err});
+  });
+});
+
 module.exports = router;
