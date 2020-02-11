@@ -106,4 +106,17 @@ router.put('/:id', function(req, res, next) {
   });
 });
 
+router.delete('/:id', function(req, res, next) {
+  models.Record.findByPk(req.params.id).then((record) => {
+    if (record) {
+      record.destroy();
+      return res.status(200).json({'deleted': record});
+    } else {
+      return res.status(400).json({'error': 'bad id'});
+    }
+  }, (err) => {
+    return res.status(500).json({'error': err});
+  });
+});
+
 module.exports = router;
