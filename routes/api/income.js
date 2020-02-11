@@ -28,7 +28,7 @@ router.get('/', function(req, res, next) {
     where: {
       RecordType: 'Income',
       Date: {
-        [Op.between]: [req.dateFrom, req.dateTo]
+        [Op.between]: [req.dateFrom, req.dateTo],
       },
     },
     limit: req.limitNumber}).then((records) => {
