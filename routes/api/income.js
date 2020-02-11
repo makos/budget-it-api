@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const models = require('../../models');
+const { Op } = require('sequelize');
 
 router.get('/', function(req, res, next) {
+  // /api/income?limit=[INTEGER] to limit number of returned records.
   if (req.query.limit !== undefined) {
     req.limitNumber = Number(req.query.limit);
 
@@ -11,9 +13,23 @@ router.get('/', function(req, res, next) {
     }
   }
 
+  // /api/income?dateFrom=[DATESTRING]&dateTo=[DATESTRING] to filter based on
+  // dates.
+  if (req.query.dateFrom !== undefined && req.query.dateTo !== undefined) {
+    req.dateFrom = new Date(req.query.dateFrom);
+    req.dateTo = new Date(req.query.dateTo);
+
+    if (req.dateFrom == "Invalid Date" || req.dateTo == "Invalid Date") {
+      return res.status(404).json({'msg': 'wrong query'});
+    }
+  }
+
   models.Record.findAll({
     where: {
       RecordType: 'Income',
+      Date: {
+        [Op.between]: [req.dateFrom, req.dateTo]
+      },
     },
     limit: req.limitNumber}).then((records) => {
     if (records == null) {
