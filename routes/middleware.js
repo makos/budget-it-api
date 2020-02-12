@@ -15,12 +15,13 @@ const setRecordType = function(req, res, next) {
 // /api/[income,expenses]?limit=INTEGER to limit number of returned records.
 const setLimit = function(req, res, next) {
   if (req.query.limit) {
-    req.searchClause.limit = Number(req.query.limit);
 
-    if (Number.isNaN(req.searchClause.limit)) {
-      return res.status(404).json({
+    if (isNaN(Number(req.query.limit))) {
+      return res.status(400).json({
         'Error': '?limit= query should be an integer, e.g. ?limit=2'
       });
+    } else {
+      req.searchClause.limit = Number(req.query.limit);
     }
   }
 
@@ -35,8 +36,8 @@ const setDateRange = function(req, res, next) {
     const dateTo = new Date(req.query.dateTo);
 
     if (dateFrom == 'Invalid Date' || dateTo == 'Invalid Date') {
-      return res.status(404).json({
-        'Error': '?date[From,To]= accepts a valid ISO date string, in format' + 
+      return res.status(400).json({
+        'Error': '?date[From,To]= accepts a valid ISO date string, in format' +
         ' YYYY-MM-DD'
       });
     }
@@ -76,7 +77,7 @@ const setId = function(req, res, next) {
         'Error': `${req.params.id} is not a valid number.`
       });
     } else {
-      req.searchClause.where.RecordID = req.params.id;
+      req.searchClause.where.RecordID = Number(req.params.id);
     }
   }
   next();
