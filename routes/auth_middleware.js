@@ -7,11 +7,11 @@ const authJWT = function (req, res, next) {
   if (header) {
     const token = header.split(' ')[1];
 
-    jwt.verify(token, config.secret, (err, user) => {
+    jwt.verify(token, config.secret, (err, decoded) => {
       if (err) {
         return res.status(403).json({'Error': 'Forbidden'});
       } else {
-        req.user = user;
+        req.user = decoded.name;
         next();
       }
     });

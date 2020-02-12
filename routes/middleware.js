@@ -12,6 +12,11 @@ const setRecordType = function(req, res, next) {
   next();
 };
 
+const setUser = function(req, res, next) {
+  req.searchClause.where.UserName = req.user;
+  next();
+};
+
 // /api/[income,expenses]?limit=INTEGER to limit number of returned records.
 const setLimit = function(req, res, next) {
   if (req.query.limit) {
@@ -94,7 +99,7 @@ const postRecord = function(req, res) {
       Type: req.body.type,
       Comment: req.body.comment,
       RecordType: req.searchClause.where.RecordType,
-      UserName: 'makos', // TODO: req.user from JWT
+      UserName: req.user,
     }).then((record) => {
       res.status(200).json({'Created': record});
     }, (err) => {
@@ -109,7 +114,7 @@ const postRecord = function(req, res) {
 
 // setId() must be called before this middleware.
 const deleteRecord = function(req, res) {
-  models.Record.findByPk(req.searchClause.where.RecordID).then((record) => {
+  models.Record.findOne(req.searchClause).then((record) => {
     if (record) {
       record.destroy();
       return res.status(200).json({'Deleted': record});
@@ -124,7 +129,7 @@ const deleteRecord = function(req, res) {
 };
 
 const putRecord = function(req, res) {
-  models.Record.findByPk(req.searchClause.where.RecordID).then((record) => {
+  models.Record.findOne(req.searchClause).then((record) => {
     if (record) {
       record.update({
         Amount: req.body.amount || record.Amount,
@@ -154,4 +159,5 @@ module.exports = {
   postRecord,
   deleteRecord,
   putRecord,
+  setUser,
 };
