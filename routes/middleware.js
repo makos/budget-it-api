@@ -18,7 +18,9 @@ const setLimit = function(req, res, next) {
     req.searchClause.limit = Number(req.query.limit);
 
     if (Number.isNaN(req.searchClause.limit)) {
-      return res.status(404).json({'msg': 'wrong query'});
+      return res.status(404).json({
+        'Error': '?limit= query should be an integer, e.g. ?limit=2'
+      });
     }
   }
 
@@ -33,7 +35,10 @@ const setDateRange = function(req, res, next) {
     const dateTo = new Date(req.query.dateTo);
 
     if (dateFrom == 'Invalid Date' || dateTo == 'Invalid Date') {
-      return res.status(404).json({'msg': 'wrong query'});
+      return res.status(404).json({
+        'Error': '?date[From,To]= accepts a valid ISO date string, in format' + 
+        ' YYYY-MM-DD'
+      });
     }
 
     req.searchClause.where.Date = {[Op.between]: [dateFrom, dateTo]};
@@ -55,7 +60,9 @@ const getAllRecords = function(req, res) {
 const getOneRecord = function(req, res) {
   models.Record.findOne(req.searchClause).then((record) => {
     if (!record) {
-      return res.status(404).json({msg: 'no data'});
+      return res.status(404).json({
+        'Error': `Resource ID ${req.searchClause.where.RecordID} doesn't exist.`
+      });
     } else {
       return res.status(200).json(record);
     }
@@ -65,12 +72,12 @@ const getOneRecord = function(req, res) {
 const setId = function(req, res, next) {
   if (req.params.id) {
     if (isNaN(Number(req.params.id))) {
-      return res.status(400).json({'error': 'bad query'});
+      return res.status(400).json({
+        'Error': `${req.params.id} is not a valid number.`
+      });
     } else {
       req.searchClause.where.RecordID = req.params.id;
     }
-  } else {
-    return res.status(400).json({'error': 'bad query'});
   }
   next();
 };
@@ -89,12 +96,14 @@ const postRecord = function(req, res) {
       RecordType: req.searchClause.where.RecordType,
       UserName: 'makos', // TODO: req.user from JWT
     }).then((record) => {
-      res.status(200).json({'created': record});
+      res.status(200).json({'Created': record});
     }, (err) => {
-      res.status(500).json({'error': err});
+      res.status(500).json({'Error': err});
     });
   } else {
-    res.status(400).json({'error': 'bad request'});
+    res.status(400).json({
+      'Error': 'Bad request: missing Amount (decimal number) field.'
+    });
   }
 };
 
@@ -103,12 +112,14 @@ const deleteRecord = function(req, res) {
   models.Record.findByPk(req.searchClause.where.RecordID).then((record) => {
     if (record) {
       record.destroy();
-      return res.status(200).json({'deleted': record});
+      return res.status(200).json({'Deleted': record});
     } else {
-      return res.status(400).json({'error': 'bad id'});
+      return res.status(400).json({
+        'Error': `Record with ID ${req.searchClause.where.RecordID} not found.`
+      });
     }
   }, (err) => {
-    return res.status(500).json({'error': err});
+    return res.status(500).json({'Error': err});
   });
 };
 
