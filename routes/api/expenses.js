@@ -3,9 +3,11 @@ const router = express.Router();
 const models = require('../../models');
 const m = require('../middleware');
 
-router.get('/', m.setRecordType, m.setLimit, m.setDateRange, m.getAllRecords);
+router.use(m.setRecordType);
 
-router.get('/:id', m.setRecordType, m.setId, m.getOneRecord);
+router.get('/', m.setLimit, m.setDateRange, m.getAllRecords);
+
+router.get('/:id', m.setId, m.getOneRecord);
 
 router.post('/', function(req, res, next) {
   if (req.body.amount) {
