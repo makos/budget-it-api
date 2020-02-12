@@ -11,7 +11,9 @@ router.get('/:id', m.setId, m.getOneRecord);
 
 router.post('/', m.postRecord);
 
-router.put('/:id', function(req, res, next) {
+// TODO: Maybe PUT should only be used to update, not create? Since this messes
+// up primary keys in the DB.
+router.put('/:id', m.setId, function(req, res, next) {
   models.Record.findOrCreate({
     where: {
       RecordID: req.params.id,
@@ -42,17 +44,6 @@ router.put('/:id', function(req, res, next) {
   });
 });
 
-router.delete('/:id', function(req, res, next) {
-  models.Record.findByPk(req.params.id).then((record) => {
-    if (record) {
-      record.destroy();
-      return res.status(200).json({'deleted': record});
-    } else {
-      return res.status(400).json({'error': 'bad id'});
-    }
-  }, (err) => {
-    return res.status(500).json({'error': err});
-  });
-});
+router.delete('/:id', m.setId, m.deleteRecord);
 
 module.exports = router;

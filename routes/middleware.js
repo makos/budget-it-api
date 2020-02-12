@@ -98,6 +98,20 @@ const postRecord = function(req, res) {
   }
 };
 
+// setId() must be called before this middleware.
+const deleteRecord = function(req, res) {
+  models.Record.findByPk(req.searchClause.where.RecordID).then((record) => {
+    if (record) {
+      record.destroy();
+      return res.status(200).json({'deleted': record});
+    } else {
+      return res.status(400).json({'error': 'bad id'});
+    }
+  }, (err) => {
+    return res.status(500).json({'error': err});
+  });
+};
+
 module.exports = {
   setRecordType,
   setLimit,
@@ -106,4 +120,5 @@ module.exports = {
   setId,
   getOneRecord,
   postRecord,
+  deleteRecord,
 };
