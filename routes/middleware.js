@@ -52,9 +52,34 @@ const getAllRecords = function(req, res) {
   });
 };
 
+const getOneRecord = function(req, res) {
+  models.Record.findOne(req.searchClause).then((record) => {
+    if (!record) {
+      return res.status(404).json({msg: 'no data'});
+    } else {
+      return res.status(200).json(record);
+    }
+  });
+};
+
+const setId = function(req, res, next) {
+  if (req.params.id) {
+    if (isNaN(Number(req.params.id))) {
+      return res.status(400).json({'error': 'bad query'});
+    } else {
+      req.searchClause.where.RecordID = req.params.id;
+    }
+  } else {
+    return res.status(400).json({'error': 'bad query'});
+  }
+  next();
+};
+
 module.exports = {
   setRecordType,
   setLimit,
   setDateRange,
   getAllRecords,
+  setId,
+  getOneRecord,
 };

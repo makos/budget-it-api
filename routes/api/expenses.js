@@ -1,25 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const models = require('../../models');
-const {Op} = require('sequelize');
 const m = require('../middleware');
 
 router.get('/', m.setRecordType, m.setLimit, m.setDateRange, m.getAllRecords);
 
-router.get('/:id', function(req, res, next) {
-  models.Record.findOne({
-    where: {
-      RecordID: req.params.id,
-      RecordType: 'Expense',
-    },
-  }).then((record) => {
-    if (!record) {
-      return res.status(404).json({msg: 'no data'});
-    } else {
-      return res.status(200).json(record);
-    }
-  });
-});
+router.get('/:id', m.setRecordType, m.setId, m.getOneRecord);
 
 router.post('/', function(req, res, next) {
   if (req.body.amount) {
