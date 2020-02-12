@@ -4,7 +4,7 @@ const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.js')[env];
 const models = require('../models');
 
-const checkToken = function (req, res, next) {
+const checkToken = function(req, res, next) {
   const header = req.get('authorization');
   if (header) {
     const token = header.split(' ')[1];
@@ -20,9 +20,9 @@ const checkToken = function (req, res, next) {
   } else {
     res.status(401).json({'Error': 'Unauthorized'});
   }
-}
+};
 
-const checkBodyPopulated = function (req, res ,next) {
+const checkBodyPopulated = function(req, res, next) {
   if (req.body.username && req.body.password) {
     next();
   } else {
@@ -30,20 +30,20 @@ const checkBodyPopulated = function (req, res ,next) {
   }
 };
 
-const checkPassword = function (req, res, next) {
+const checkPassword = function(req, res, next) {
   if (req.body.password.length < 8) {
     res.status(400).json({
-      'Error': 'Password must be at least 8 characters long.'
+      'Error': 'Password must be at least 8 characters long.',
     });
   }
   next();
 };
 
-const checkIfUserExists = function (req, res, next) {
+const checkIfUserExists = function(req, res, next) {
   models.User.findByPk(req.body.username).then((user) => {
     if (user) {
       res.status(400).json({
-        'Error': `User ${req.body.username} already exists.`
+        'Error': `User ${req.body.username} already exists.`,
       });
     } else {
       next();
@@ -51,7 +51,7 @@ const checkIfUserExists = function (req, res, next) {
   });
 };
 
-const createNewUser = function (req, res) {
+const createNewUser = function(req, res) {
   bcrypt.genSalt(16, function(err, salt) {
     bcrypt.hash(req.body.password, salt, function(err, hash) {
       if (err) {
@@ -68,7 +68,7 @@ const createNewUser = function (req, res) {
   });
 };
 
-const loginUser = function (req, res ,next) {
+const loginUser = function(req, res, next) {
   models.User.findByPk(req.body.username).then((user) => {
     if (user) {
       bcrypt.compare(req.body.password, user.Password, function(err, login) {
@@ -83,7 +83,7 @@ const loginUser = function (req, res ,next) {
       });
     }
   });
-}
+};
 
 module.exports = {
   checkToken,
@@ -92,4 +92,4 @@ module.exports = {
   checkPassword,
   createNewUser,
   loginUser,
-}
+};

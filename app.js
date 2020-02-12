@@ -6,7 +6,6 @@ const logger = require('morgan');
 
 const incomeRouter = require('./routes/api/income');
 const expensesRouter = require('./routes/api/expenses');
-//const usersRouter = require('./routes/api/users');
 const loginRouter = require('./routes/login');
 const registerRouter = require('./routes/register');
 
@@ -22,7 +21,6 @@ app.use('/api/income', incomeRouter);
 app.use('/api/expenses', expensesRouter);
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
-//app.use('/api/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -36,7 +34,7 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500).json({'Error (app.js)': err.message});
+  res.status(err.status || 500).json({'Error (app)': err.message});
   console.log(err.stack);
 });
 

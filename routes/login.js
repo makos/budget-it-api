@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const models = require('../models');
-const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.js')[env];
 const auth = require('./auth_middleware');
 
 router.post('/', auth.checkBodyPopulated, auth.loginUser);
+
+router.use('/', function(req, res) {
+  res.status(405).json({
+    'Error (/login)': 'Only POST is allowed for this URL.',
+  });
+});
 
 module.exports = router;

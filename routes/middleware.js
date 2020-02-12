@@ -55,7 +55,9 @@ const setDateRange = function(req, res, next) {
 const getAllRecords = function(req, res) {
   models.Record.findAll(req.searchClause).then((records) => {
     if (!records) {
-      return res.status(404).json({'Error': 'No data in database.'});
+      return res.status(404).json({
+        'Error (getAllRecords)': 'No data in database.',
+      });
     } else {
       return res.status(200).json(records);
     }
@@ -103,7 +105,7 @@ const postRecord = function(req, res) {
     }).then((record) => {
       res.status(200).json({'Created': record});
     }, (err) => {
-      res.status(500).json({'Error': err});
+      res.status(500).json({'Error (postRecord)': err});
     });
   } else {
     res.status(400).json({
@@ -124,7 +126,7 @@ const deleteRecord = function(req, res) {
       });
     }
   }, (err) => {
-    return res.status(500).json({'Error': err});
+    return res.status(500).json({'Error (deleteRecord)': err});
   });
 };
 
@@ -145,7 +147,7 @@ const putRecord = function(req, res) {
       });
     }
   }, (err) => {
-    return res.status(500).json({'Error': err});
+    return res.status(500).json({'Error (putRecord)': err});
   });
 };
 
