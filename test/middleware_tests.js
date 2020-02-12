@@ -81,4 +81,11 @@ describe('Middleware functions for /api routes', function() {
     assert.strictEqual(response.statusCode, 400);
     assert.ok(data.Error);
   });
+
+  it('fails to POST new record if no req.body.amount is given', function() {
+    m.postRecord(request, response, noop);
+    const data = response._getJSONData();
+    assert.strictEqual(response.statusCode, 400);
+    assert.ok(data.Error);
+  });
 });
