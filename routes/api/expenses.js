@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const m = require('../middleware');
+const auth = require('../auth_middleware');
+
+router.use(auth.authJWT);
 
 router.use(m.setRecordType);
 
