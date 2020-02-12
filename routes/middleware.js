@@ -50,7 +50,7 @@ const setDateRange = function(req, res, next) {
 const getAllRecords = function(req, res) {
   models.Record.findAll(req.searchClause).then((records) => {
     if (!records) {
-      return res.status(404).json({msg: 'no data'});
+      return res.status(404).json({'Error': 'No data in database.'});
     } else {
       return res.status(200).json(records);
     }
