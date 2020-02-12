@@ -1,11 +1,10 @@
 const assert = require('assert');
 const httpMocks = require('node-mocks-http');
 const m = require('../routes/middleware');
-const {Op} = require('sequelize');
 
-const noop = function () {
+const noop = function() {
   return;
-}
+};
 
 describe('Middleware functions for /api routes', function() {
   before(function() {
@@ -39,8 +38,8 @@ describe('Middleware functions for /api routes', function() {
   });
 
   it('sets req.searchClause.where.Date', function() {
-    request.query.dateFrom = "2020-01-01";
-    request.query.dateTo = "2020-01-02";
+    request.query.dateFrom = '2020-01-01';
+    request.query.dateTo = '2020-01-02';
 
     m.setDateRange(request, response, noop);
     assert.ok(request.searchClause.where.Date);
@@ -67,8 +66,8 @@ describe('Middleware functions for /api routes', function() {
   });
 
   it('fails setting req.searchClause.where.date with wrong input', function() {
-    request.query.dateFrom = "2o2o-o1-o1";
-    request.query.dateTo = "Monday";
+    request.query.dateFrom = '2o2o-o1-o1';
+    request.query.dateTo = 'Monday';
     m.setDateRange(request, response, noop);
     const data = response._getJSONData();
     assert.strictEqual(response.statusCode, 400);

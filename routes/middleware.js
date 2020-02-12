@@ -15,10 +15,9 @@ const setRecordType = function(req, res, next) {
 // /api/[income,expenses]?limit=INTEGER to limit number of returned records.
 const setLimit = function(req, res, next) {
   if (req.query.limit) {
-
     if (isNaN(Number(req.query.limit))) {
       return res.status(400).json({
-        'Error': '?limit= query should be an integer, e.g. ?limit=2'
+        'Error': '?limit= query should be an integer, e.g. ?limit=2',
       });
     } else {
       req.searchClause.limit = Number(req.query.limit);
@@ -38,7 +37,7 @@ const setDateRange = function(req, res, next) {
     if (dateFrom == 'Invalid Date' || dateTo == 'Invalid Date') {
       return res.status(400).json({
         'Error': '?date[From,To]= accepts a valid ISO date string, in format' +
-        ' YYYY-MM-DD'
+        ' YYYY-MM-DD',
       });
     }
 
@@ -62,7 +61,7 @@ const getOneRecord = function(req, res) {
   models.Record.findOne(req.searchClause).then((record) => {
     if (!record) {
       return res.status(404).json({
-        'Error': `Resource ID ${req.searchClause.where.RecordID} doesn't exist.`
+        'Error': `Resource ID ${req.searchClause.where.RecordID} doesn't exist.`,
       });
     } else {
       return res.status(200).json(record);
@@ -74,7 +73,7 @@ const setId = function(req, res, next) {
   if (req.params.id) {
     if (isNaN(Number(req.params.id))) {
       return res.status(400).json({
-        'Error': `${req.params.id} is not a valid number.`
+        'Error': `${req.params.id} is not a valid number.`,
       });
     } else {
       req.searchClause.where.RecordID = Number(req.params.id);
@@ -103,7 +102,7 @@ const postRecord = function(req, res) {
     });
   } else {
     res.status(400).json({
-      'Error': 'Bad request: missing Amount (decimal number) field.'
+      'Error': 'Bad request: missing Amount (decimal number) field.',
     });
   }
 };
@@ -116,7 +115,7 @@ const deleteRecord = function(req, res) {
       return res.status(200).json({'Deleted': record});
     } else {
       return res.status(400).json({
-        'Error': `Record with ID ${req.searchClause.where.RecordID} not found.`
+        'Error': `Record with ID ${req.searchClause.where.RecordID} not found.`,
       });
     }
   }, (err) => {
