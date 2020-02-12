@@ -2,19 +2,9 @@ const express = require('express');
 const router = express.Router();
 const models = require('../../models');
 const {Op} = require('sequelize');
-const {setRecordType, setLimit, setDateRange} = require('../middleware');
+const m = require('../middleware');
 
-router.get('/', setRecordType, setLimit, setDateRange,
-  function(req, res, next) {
-
-  models.Record.findAll(req.searchClause).then((records) => {
-    if (!records) {
-      return res.status(404).json({msg: 'no data'});
-    } else {
-      return res.status(200).json(records);
-    }
-  });
-});
+router.get('/', m.setRecordType, m.setLimit, m.setDateRange, m.getAllRecords);
 
 router.get('/:id', function(req, res, next) {
   models.Record.findOne({

@@ -1,6 +1,7 @@
 const {Op} = require('sequelize');
+const models = require('../models');
 
-const setRecordType = function (req, res, next) {
+const setRecordType = function(req, res, next) {
   req.searchClause = {};
   if (req.baseUrl == '/api/income') {
     req.searchClause.where = {RecordType: 'Income'};
@@ -9,10 +10,10 @@ const setRecordType = function (req, res, next) {
   }
 
   next();
-}
+};
 
 // /api/[income,expenses]?limit=INTEGER to limit number of returned records.
-const setLimit = function (req, res, next) {
+const setLimit = function(req, res, next) {
   if (req.query.limit) {
     req.searchClause.limit = Number(req.query.limit);
 
@@ -22,11 +23,11 @@ const setLimit = function (req, res, next) {
   }
 
   next();
-}
+};
 
 // /api/[income,expenses]?dateFrom=DATESTRING&dateTo=DATESTRING to filter
 // based on dates.
-const setDateRange = function (req, res, next) {
+const setDateRange = function(req, res, next) {
   if (req.query.dateFrom && req.query.dateTo) {
     const dateFrom = new Date(req.query.dateFrom);
     const dateTo = new Date(req.query.dateTo);
@@ -39,10 +40,21 @@ const setDateRange = function (req, res, next) {
   }
 
   next();
-}
+};
+
+const getAllRecords = function(req, res) {
+  models.Record.findAll(req.searchClause).then((records) => {
+    if (!records) {
+      return res.status(404).json({msg: 'no data'});
+    } else {
+      return res.status(200).json(records);
+    }
+  });
+};
 
 module.exports = {
   setRecordType,
   setLimit,
   setDateRange,
+  getAllRecords,
 };
