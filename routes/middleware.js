@@ -75,6 +75,29 @@ const setId = function(req, res, next) {
   next();
 };
 
+const postRecord = function(req, res) {
+  if (req.body.amount) {
+    if (!req.body.date) {
+      req.body.date = new Date();
+    }
+
+    models.Record.create({
+      Amount: req.body.amount,
+      Date: req.body.date,
+      Type: req.body.type,
+      Comment: req.body.comment,
+      RecordType: req.searchClause.where.RecordType,
+      UserName: 'makos', // TODO: req.user from JWT
+    }).then((record) => {
+      res.status(200).json({'created': record});
+    }, (err) => {
+      res.status(500).json({'error': err});
+    });
+  } else {
+    res.status(400).json({'error': 'bad request'});
+  }
+};
+
 module.exports = {
   setRecordType,
   setLimit,
@@ -82,4 +105,5 @@ module.exports = {
   getAllRecords,
   setId,
   getOneRecord,
+  postRecord,
 };

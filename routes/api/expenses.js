@@ -9,28 +9,7 @@ router.get('/', m.setLimit, m.setDateRange, m.getAllRecords);
 
 router.get('/:id', m.setId, m.getOneRecord);
 
-router.post('/', function(req, res, next) {
-  if (req.body.amount) {
-    if (!req.body.date) {
-      req.body.date = new Date();
-    }
-
-    models.Record.create({
-      Amount: req.body.amount,
-      Date: req.body.date,
-      Type: req.body.type,
-      Comment: req.body.comment,
-      RecordType: 'Expense',
-      UserName: 'makos', // TODO: req.user from JWT
-    }).then((record) => {
-      res.status(200).json({'created': record});
-    }, (err) => {
-      res.status(500).json({'error': err});
-    });
-  } else {
-    res.status(400).json({'error': 'bad request'});
-  }
-});
+router.post('/', m.postRecord);
 
 router.put('/:id', function(req, res, next) {
   models.Record.findOrCreate({
