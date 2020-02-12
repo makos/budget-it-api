@@ -123,6 +123,27 @@ const deleteRecord = function(req, res) {
   });
 };
 
+const putRecord = function(req, res) {
+  models.Record.findByPk(req.searchClause.where.RecordID).then((record) => {
+    if (record) {
+      record.update({
+        Amount: req.body.amount || record.Amount,
+        Date: req.body.date || record.Date,
+        Type: req.body.type || record.Type,
+        Comment: req.body.comment || record.Comment,
+      }).then(() => {
+        return res.status(200).json({'Updated': record});
+      });
+    } else {
+      return res.status(404).json({
+        'Error': `Record with ID ${req.params.id} not found.`
+      });
+    }
+  }, (err) => {
+    return res.status(500).json({'Error': err});
+  });
+};
+
 module.exports = {
   setRecordType,
   setLimit,
@@ -132,4 +153,5 @@ module.exports = {
   getOneRecord,
   postRecord,
   deleteRecord,
+  putRecord,
 };
