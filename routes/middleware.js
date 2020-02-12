@@ -61,7 +61,7 @@ const getOneRecord = function(req, res) {
   models.Record.findOne(req.searchClause).then((record) => {
     if (!record) {
       return res.status(404).json({
-        'Error': `Resource ID ${req.searchClause.where.RecordID} doesn't exist.`,
+        'Error': `Record ID ${req.searchClause.where.RecordID} doesn't exist.`,
       });
     } else {
       return res.status(200).json(record);
@@ -136,7 +136,7 @@ const putRecord = function(req, res) {
       });
     } else {
       return res.status(404).json({
-        'Error': `Record with ID ${req.params.id} not found.`
+        'Error': `Record with ID ${req.params.id} not found.`,
       });
     }
   }, (err) => {

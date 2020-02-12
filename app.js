@@ -4,7 +4,6 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-const models = require('./models/');
 const incomeRouter = require('./routes/api/income');
 const expensesRouter = require('./routes/api/expenses');
 const usersRouter = require('./routes/api/users');

@@ -34,7 +34,9 @@ describe('Middleware functions for /api routes', function() {
     m.setRecordType(request, response, noop);
     m.setRecordType(requestExpenses, response, noop);
     assert.strictEqual(request.searchClause.where.RecordType, 'Income');
-    assert.strictEqual(requestExpenses.searchClause.where.RecordType, 'Expense');
+    assert.strictEqual(
+        requestExpenses.searchClause.where.RecordType,
+        'Expense');
   });
 
   it('sets req.searchClause.where.Date', function() {
@@ -74,13 +76,14 @@ describe('Middleware functions for /api routes', function() {
     assert.ok(data.Error);
   });
 
-  it('fails setting req.searchClause.where.RecordID with wrong input', function() {
-    request.params.id = 'asdf';
-    m.setId(request, response, noop);
-    const data = response._getJSONData();
-    assert.strictEqual(response.statusCode, 400);
-    assert.ok(data.Error);
-  });
+  it('fails setting req.searchClause.where.RecordID with wrong input',
+      function() {
+        request.params.id = 'asdf';
+        m.setId(request, response, noop);
+        const data = response._getJSONData();
+        assert.strictEqual(response.statusCode, 400);
+        assert.ok(data.Error);
+      });
 
   it('fails to POST new record if no req.body.amount is given', function() {
     m.postRecord(request, response, noop);
