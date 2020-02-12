@@ -11,7 +11,7 @@ const authJWT = function (req, res, next) {
       if (err) {
         return res.status(403).json({'Error': 'Forbidden'});
       } else {
-        req.user = decoded.name;
+        req.user = decoded.loggedInAs;
         next();
       }
     });

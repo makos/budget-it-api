@@ -3,7 +3,6 @@ const router = express.Router();
 const m = require('../middleware');
 const auth = require('../auth_middleware');
 
-
 router.use(auth.authJWT, m.setRecordType, m.setUser);
 
 router.get('/', m.setLimit, m.setDateRange, m.getAllRecords);
