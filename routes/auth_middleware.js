@@ -73,9 +73,9 @@ const loginUser = function(req, res, next) {
     if (user) {
       bcrypt.compare(req.body.password, user.Password, function(err, login) {
         if (login) {
-          // TODO: Expire the token in a week or something like that.
-          // Refresh it every time user passes a token check on other routes.
-          const token = jwt.sign({loggedInAs: user.Name}, config.secret);
+          const token = jwt.sign({loggedInAs: user.Name}, config.secret, {
+            expiresIn: config.jwtExp,
+          });
           return res.status(200).json(token);
         } else {
           return res.status(400).json({'Error': 'Wrong username or password.'});
