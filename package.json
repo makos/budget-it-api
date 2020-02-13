@@ -27,6 +27,7 @@
     "eslint-plugin-standard": "^4.0.1",
     "mocha": "^7.0.1",
     "node-mocks-http": "^1.8.1",
+    "nyc": "^15.0.0",
     "sequelize-cli": "^5.5.1",
     "sqlite3": "^4.1.1"
   }
