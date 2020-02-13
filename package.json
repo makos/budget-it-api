@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "test": "NODE_ENV=test npx mocha"
+    "test": "NODE_ENV=test npx mocha",
+    "testcov": "NODE_ENV=test npx nyc mocha"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
