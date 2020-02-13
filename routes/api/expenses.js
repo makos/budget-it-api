@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const m = require('../middleware');
-const auth = require('../auth_middleware');
+const m = require('../../utils/api_middleware');
+const auth = require('../../utils/auth_middleware');
 
 router.use(auth.checkToken, m.setRecordType, m.setUser);
 

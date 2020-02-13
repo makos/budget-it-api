@@ -1,6 +1,6 @@
 const assert = require('assert');
 const httpMocks = require('node-mocks-http');
-const m = require('../routes/middleware');
+const m = require('../utils/api_middleware');
 
 const noop = function() {
   return;
