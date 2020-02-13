@@ -32,7 +32,7 @@ const checkBodyPopulated = function(req, res, next) {
 
 const checkPassword = function(req, res, next) {
   if (req.body.password.length < 8) {
-    res.status(400).json({
+    return res.status(400).json({
       'Error': 'Password must be at least 8 characters long.',
     });
   }
