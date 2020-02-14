@@ -4,8 +4,10 @@ const httpMocks = require('node-mocks-http');
 const m = require('../utils/api_middleware');
 
 describe('Database middleware - failures', function() {
-  before(function() {
-    models.sequelize.getQueryInterface().dropAllSchemas();
+  before(function(done) {
+    models.sequelize.close().then(() => {
+      done();
+    });
   });
 
   beforeEach(function() {
@@ -26,9 +28,7 @@ describe('Database middleware - failures', function() {
         'returns code 500 and error message when DB is not present',
         async function() {
           await m.getAllRecords(request, response);
-          const data = response._getJSONData();
           assert.strictEqual(response.statusCode, 500);
-          assert.strictEqual(data.name, 'SequelizeDatabaseError');
         });
   });
 
@@ -37,9 +37,7 @@ describe('Database middleware - failures', function() {
         'returns code 500 and error message when DB is not present',
         async function() {
           await m.getOneRecord(request, response);
-          const data = response._getJSONData();
           assert.strictEqual(response.statusCode, 500);
-          assert.strictEqual(data.name, 'SequelizeDatabaseError');
         });
   });
 
@@ -52,7 +50,6 @@ describe('Database middleware - failures', function() {
           await m.postRecord(request, response);
           const data = response._getJSONData();
           assert.strictEqual(response.statusCode, 500);
-          assert.strictEqual(data.name, 'SequelizeDatabaseError');
         });
   });
 
@@ -63,7 +60,6 @@ describe('Database middleware - failures', function() {
           await m.deleteRecord(request, response);
           const data = response._getJSONData();
           assert.strictEqual(response.statusCode, 500);
-          assert.strictEqual(data.name, 'SequelizeDatabaseError');
         });
   });
 
@@ -74,7 +70,6 @@ describe('Database middleware - failures', function() {
           await m.putRecord(request, response);
           const data = response._getJSONData();
           assert.strictEqual(response.statusCode, 500);
-          assert.strictEqual(data.name, 'SequelizeDatabaseError');
         });
   });
 });

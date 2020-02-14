@@ -2,6 +2,7 @@ const models = require('../models');
 const assert = require('assert');
 const httpMocks = require('node-mocks-http');
 const m = require('../utils/api_middleware');
+const ma = require('../utils/auth_middleware');
 
 describe('Database middleware - success', function() {
   beforeEach(function() {
@@ -15,115 +16,6 @@ describe('Database middleware - success', function() {
       },
     });
     response = httpMocks.createResponse();
-  });
-
-  before(function(done) {
-    // Create the tables and records in a temporary SQLite3 database file.
-    const queryInterface = models.sequelize.getQueryInterface();
-    // CREATE TABLE USERS
-    queryInterface.createTable('Users', {
-      ID: {
-        type: models.Sequelize.INTEGER,
-        allowNull: false,
-        unique: true,
-        autoIncrement: true,
-      },
-      Name: {
-        type: models.Sequelize.STRING,
-        allowNull: false,
-        primaryKey: true,
-      },
-      Password: {
-        type: models.Sequelize.STRING,
-        allowNull: false,
-      },
-      CreatedAt: models.Sequelize.DATE,
-      UpdatedAt: models.Sequelize.DATE,
-    }, {force: true}).then(function() {
-      // INSERT TWO TEST USERS
-      queryInterface.bulkInsert('Users', [{
-        ID: 1,
-        Name: 'makos',
-        Password: 'testpass',
-        CreatedAt: new Date().toISOString(),
-        UpdatedAt: new Date().toISOString(),
-      }, {
-        ID: 2,
-        Name: 'notroot',
-        Password: 'testpass',
-        CreatedAt: new Date().toISOString(),
-        UpdatedAt: new Date().toISOString(),
-      }]).then(function() {
-        // CREATE TABLE RECORDS
-        queryInterface.createTable('Records', {
-          RecordID: {
-            type: models.Sequelize.INTEGER,
-            primaryKey: true,
-            autoIncrement: true,
-          },
-          Amount: {
-            type: models.Sequelize.DECIMAL(10, 2),
-            allowNull: false,
-          },
-          Date: {
-            type: models.Sequelize.DATEONLY,
-            allowNull: false,
-          },
-          Type: {
-            type: models.Sequelize.STRING,
-            allowNull: true,
-            defaultValue: '',
-          },
-          Comment: {
-            type: models.Sequelize.STRING,
-            allowNull: true,
-            defaultValue: '',
-          },
-          RecordType: {
-            type: models.Sequelize.ENUM('Income', 'Expense'),
-            allowNull: false,
-          },
-          UserName: {
-            type: models.Sequelize.STRING,
-            allowNull: false,
-            references: {
-              model: 'Users',
-              key: 'Name',
-            },
-          },
-        }, {force: true}).then(function() {
-          // INSERT THREE TEST RECORDS
-          queryInterface.bulkInsert('Records', [{
-            RecordID: 1,
-            Amount: 10.2,
-            Date: new Date().toISOString(),
-            Type: 'Food',
-            Comment: 'McDonald\'s',
-            RecordType: 'Expense',
-            UserName: 'makos',
-          }, {
-            RecordID: 2,
-            Amount: 99.9,
-            Date: new Date().toISOString(),
-            Type: 'Media',
-            Comment: 'Hosting',
-            RecordType: 'Expense',
-            UserName: 'notroot',
-          }, {
-            RecordID: 3,
-            Amount: 199.9,
-            Date: new Date().toISOString(),
-            Type: 'Paycheck',
-            Comment: '',
-            RecordType: 'Income',
-            UserName: 'makos',
-          }]).then(function() {
-            // ALL DONE, promises fulfilled.
-            done();
-          });
-        });
-      });
-    });
   });
 
   describe('#getAllRecords', function() {
@@ -206,6 +98,38 @@ describe('Database middleware - success', function() {
       assert.strictEqual(data.RecordID, 2);
       assert.strictEqual(data.Amount, 1);
       assert.strictEqual(data.Comment, 'New comment');
+    });
+  });
+
+  describe('#checkIfUserExists', function() {
+    it('passes control to next() when user not found', async function() {
+      request.body.username = 'zzzxxxx';
+      await ma.checkIfUserExists(request, response, () => {
+        assert.ok(true);
+      });
+    });
+
+    it('fails when user exists in DB', async function() {
+      request.body.username = 'makos';
+      await ma.checkIfUserExists(request, response, () => {
+        assert.ok(false);
+      });
+      assert.strictEqual(response.statusCode, 400);
+      const data = response._getJSONData();
+      assert.ok(data.Error);
+    });
+
+  });
+
+  describe('#createNewUser', function() {
+    it('creates new user in the DB with proper name and ID', async function() {
+      request.body.username = 'newuser';
+      request.passwordHash = 'goodpass';
+      await ma.createNewUser(request, response);
+      const data = response._getJSONData();
+      assert.strictEqual(data.Created.Name, 'newuser');
+      assert.strictEqual(data.Created.Password, 'goodpass');
+      assert.strictEqual(response.statusCode, 200);
     });
   });
 });
