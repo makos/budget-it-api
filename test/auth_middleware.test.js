@@ -47,56 +47,62 @@ describe('Login & registration middleware functions', function() {
     response = httpMocks.createResponse();
   });
 
-  it('verifies the JWT correctly', function() {
-    ma.checkToken(requestJwt, response, noop);
-    assert.notStrictEqual(response.statusCode, 403);
-    assert.notStrictEqual(response.statusCode, 401);
-    assert.strictEqual(requestJwt.user, TESTUSER);
-  });
-
-  it('verifies if req.body has proper fields', function() {
-    ma.checkBodyPopulated(requestJwt, response, () => {
-      assert.ok(true);
+  describe('#checkToken', function() {
+    it('verifies the JWT correctly', function() {
+      ma.checkToken(requestJwt, response, noop);
+      assert.notStrictEqual(response.statusCode, 403);
+      assert.notStrictEqual(response.statusCode, 401);
+      assert.strictEqual(requestJwt.user, TESTUSER);
     });
-    assert.notStrictEqual(response.statusCode, 400);
-  });
 
-  it('checks if password provided meets requirements', function() {
-    ma.checkPassword(requestJwt, response, () => {
-      assert.ok(true);
+    it('fails with bad token', function() {
+      ma.checkToken(badRequest, response, noop);
+      assert.strictEqual(response.statusCode, 403);
+      const data = response._getJSONData();
+      assert.ok(data.Error);
     });
-    assert.notStrictEqual(response.statusCode, 400);
-  });
 
-  it('fails with bad token', function() {
-    ma.checkToken(badRequest, response, noop);
-    assert.strictEqual(response.statusCode, 403);
-    const data = response._getJSONData();
-    assert.ok(data.Error);
-  });
-
-  it('fails without Authorization header', function() {
-    ma.checkToken(httpMocks.createRequest(), response, noop);
-    assert.strictEqual(response.statusCode, 401);
-    const data = response._getJSONData();
-    assert.ok(data.Error);
-  });
-
-  it('fails without username or password in req.body', function() {
-    ma.checkBodyPopulated(badRequest, response, () => {
-      assert.ok(false);
+    it('fails without Authorization header', function() {
+      ma.checkToken(httpMocks.createRequest(), response, noop);
+      assert.strictEqual(response.statusCode, 401);
+      const data = response._getJSONData();
+      assert.ok(data.Error);
     });
-    assert.strictEqual(response.statusCode, 400);
-    const data = response._getJSONData();
-    assert.ok(data.Error);
   });
 
-  it('fails with too short password', function() {
-    ma.checkPassword(badRequest, response, () => {
-      assert.ok(false);
+  describe('#checkBodyPopulated', function() {
+    it('verifies if req.body has proper fields', function() {
+      ma.checkBodyPopulated(requestJwt, response, () => {
+        assert.ok(true);
+      });
+      assert.notStrictEqual(response.statusCode, 400);
     });
-    assert.strictEqual(response.statusCode, 400);
-    const data = response._getJSONData();
-    assert.ok(data.Error);
+
+    it('fails without username or password in req.body', function() {
+      ma.checkBodyPopulated(badRequest, response, () => {
+        assert.ok(false);
+      });
+      assert.strictEqual(response.statusCode, 400);
+      const data = response._getJSONData();
+      assert.ok(data.Error);
+    });
+  });
+
+  describe('#checkPassword', function() {
+    it('checks if password provided meets requirements', function() {
+      ma.checkPassword(requestJwt, response, () => {
+        assert.ok(true);
+      });
+      assert.notStrictEqual(response.statusCode, 400);
+    });
+
+    it('fails with too short password', function() {
+      ma.checkPassword(badRequest, response, () => {
+        assert.ok(false);
+      });
+      assert.strictEqual(response.statusCode, 400);
+      const data = response._getJSONData();
+      assert.ok(data.Error);
+    });
   });
 });

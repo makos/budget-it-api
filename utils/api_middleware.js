@@ -13,8 +13,12 @@ const setRecordType = function(req, res, next) {
 };
 
 const setUser = function(req, res, next) {
-  req.searchClause.where.UserName = req.user;
-  next();
+  if (req.user) {
+    req.searchClause.where.UserName = req.user;
+    next();
+  } else {
+    return res.status(401).json({'Error (setUser)': 'Unauthorized'});
+  }
 };
 
 // /api/[income,expenses]?limit=INTEGER to limit number of returned records.
