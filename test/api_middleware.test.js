@@ -64,14 +64,16 @@ describe('API middleware for requests & responses', function() {
       assert.ok(request.searchClause.where.Date);
     });
 
-    it('fails setting req.searchClause.where.date with wrong input', function() {
-      request.query.dateFrom = '2o2o-o1-o1';
-      request.query.dateTo = 'Monday';
-      m.setDateRange(request, response, noop);
-      const data = response._getJSONData();
-      assert.strictEqual(response.statusCode, 400);
-      assert.ok(data.Error);
-    });
+    it(
+        'fails setting req.searchClause.where.date with wrong input',
+        function() {
+          request.query.dateFrom = '2o2o-o1-o1';
+          request.query.dateTo = 'Monday';
+          m.setDateRange(request, response, noop);
+          const data = response._getJSONData();
+          assert.strictEqual(response.statusCode, 400);
+          assert.ok(data.Error);
+        });
   });
 
   describe('#setLimit', function() {
@@ -124,6 +126,15 @@ describe('API middleware for requests & responses', function() {
 
   describe('#postRecord', function() {
     it('fails to POST new record if no req.body.amount is given', function() {
+      m.postRecord(request, response, noop);
+      const data = response._getJSONData();
+      assert.strictEqual(response.statusCode, 400);
+      assert.ok(data.Error);
+    });
+
+    it('fails to POST new record with bad date string', function() {
+      request.body.amount = 99;
+      request.body.date = 'string';
       m.postRecord(request, response, noop);
       const data = response._getJSONData();
       assert.strictEqual(response.statusCode, 400);

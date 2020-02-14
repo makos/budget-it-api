@@ -58,25 +58,17 @@ const setDateRange = function(req, res, next) {
 
 const getAllRecords = function(req, res) {
   return models.Record.findAll(req.searchClause).then((records) => {
-    if (!records) {
-      return res.status(500).json({
-        'Error (getAllRecords)': 'Database error.',
-      });
-    } else {
-      return res.status(200).json(records);
-    }
+    return res.status(200).json(records);
+  }, (err) => {
+    return res.status(500).json(err);
   });
 };
 
 const getOneRecord = function(req, res) {
   return models.Record.findOne(req.searchClause).then((record) => {
-    if (!record) {
-      return res.status(404).json({
-        'Error': `Record ID ${req.searchClause.where.RecordID} doesn't exist.`,
-      });
-    } else {
-      return res.status(200).json(record);
-    }
+    return res.status(200).json(record);
+  }, (err) => {
+    return res.status(500).json(err);
   });
 };
 
@@ -97,7 +89,15 @@ const postRecord = function(req, res) {
   if (req.body.amount) {
     if (!req.body.date) {
       req.body.date = new Date();
+    } else {
+      // TODO: unit test in api_middleware.test.js.
+      req.body.date = new Date(req.body.date);
+      if (req.body.date == 'Invalid Date') {
+        return res.status(400).json({'Error': 'Bad date string passed.'});
+      }
     }
+
+    req.body.date = req.body.date.toISOString();
 
     return models.Record.create({
       Amount: req.body.amount,
@@ -109,7 +109,7 @@ const postRecord = function(req, res) {
     }).then((record) => {
       return res.status(200).json({'Created': record});
     }, (err) => {
-      return res.status(500).json({'Error (postRecord)': err});
+      return res.status(500).json(err);
     });
   } else {
     return res.status(400).json({
@@ -125,19 +125,19 @@ const deleteRecord = function(req, res) {
       record.destroy();
       return res.status(200).json({'Deleted': record});
     } else {
-      return res.status(400).json({
+      // TODO: test this branch in api_middelware.test.js.
+      return res.status(404).json({
         'Error': `Record with ID ${req.searchClause.where.RecordID} not found.`,
       });
     }
   }, (err) => {
-    return res.status(500).json({'Error (deleteRecord)': err});
+    return res.status(500).json(err);
   });
 };
 
 const putRecord = function(req, res) {
-  models.Record.findOne(req.searchClause).then((record) => {
-    if (record) {
-      record.update({
+  return models.Record.findOne(req.searchClause).then((record) => {
+      return record.update({
         Amount: req.body.amount || record.Amount,
         Date: req.body.date || record.Date,
         Type: req.body.type || record.Type,
@@ -145,13 +145,8 @@ const putRecord = function(req, res) {
       }).then(() => {
         return res.status(200).json({'Updated': record});
       });
-    } else {
-      return res.status(404).json({
-        'Error': `Record with ID ${req.params.id} not found.`,
-      });
-    }
   }, (err) => {
-    return res.status(500).json({'Error (putRecord)': err});
+    return res.status(500).json(err);
   });
 };
 

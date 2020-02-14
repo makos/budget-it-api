@@ -3,7 +3,7 @@ const assert = require('assert');
 const httpMocks = require('node-mocks-http');
 const m = require('../utils/api_middleware');
 
-describe('API middleware interacting with the database', function() {
+describe('Database middleware - success', function() {
   beforeEach(function() {
     request = httpMocks.createRequest({
       method: 'GET',
@@ -45,15 +45,15 @@ describe('API middleware interacting with the database', function() {
         ID: 1,
         Name: 'makos',
         Password: 'testpass',
-        CreatedAt: new Date(),
-        UpdatedAt: new Date(),
+        CreatedAt: new Date().toISOString(),
+        UpdatedAt: new Date().toISOString(),
       }, {
         ID: 2,
         Name: 'notroot',
         Password: 'testpass',
-        CreatedAt: new Date(),
-        UpdatedAt: new Date(),
-      }]).then(function () {
+        CreatedAt: new Date().toISOString(),
+        UpdatedAt: new Date().toISOString(),
+      }]).then(function() {
         // CREATE TABLE RECORDS
         queryInterface.createTable('Records', {
           RecordID: {
@@ -96,7 +96,7 @@ describe('API middleware interacting with the database', function() {
           queryInterface.bulkInsert('Records', [{
             RecordID: 1,
             Amount: 10.2,
-            Date: new Date(),
+            Date: new Date().toISOString(),
             Type: 'Food',
             Comment: 'McDonald\'s',
             RecordType: 'Expense',
@@ -104,7 +104,7 @@ describe('API middleware interacting with the database', function() {
           }, {
             RecordID: 2,
             Amount: 99.9,
-            Date: new Date(),
+            Date: new Date().toISOString(),
             Type: 'Media',
             Comment: 'Hosting',
             RecordType: 'Expense',
@@ -112,7 +112,7 @@ describe('API middleware interacting with the database', function() {
           }, {
             RecordID: 3,
             Amount: 199.9,
-            Date: new Date(),
+            Date: new Date().toISOString(),
             Type: 'Paycheck',
             Comment: '',
             RecordType: 'Income',
@@ -170,12 +170,42 @@ describe('API middleware interacting with the database', function() {
       assert.strictEqual(data.Deleted.RecordID, 1);
     });
 
-    it('now returns 404 when accessing deleted ID', async function() {
+    it('now getOneRecord returns empty JSON', async function() {
       request.searchClause.where.RecordID = 1;
       await m.getOneRecord(request, response);
       const data = response._getJSONData();
+      assert.strictEqual(response.statusCode, 200);
+      assert.ok(!data);
+    });
+
+    it('returns 404 when RecordID is not found', async function() {
+      request.searchClause.where.RecordID = 1000;
+      await m.deleteRecord(request, response);
+      const data = response._getJSONData();
       assert.strictEqual(response.statusCode, 404);
-      assert.ok(data.Error);
+    });
+  });
+
+  describe('#putRecord', function() {
+    it('updates a Record properly', async function() {
+      request.searchClause.where.RecordID = 2;
+      request.body.amount = 1;
+      request.body.comment = 'New comment';
+      await m.putRecord(request, response);
+      const data = response._getJSONData();
+      assert.strictEqual(response.statusCode, 200);
+      assert.strictEqual(data.Updated.RecordID, 2);
+      assert.strictEqual(data.Updated.Amount, 1);
+      assert.strictEqual(data.Updated.Comment, 'New comment');
+    });
+
+    it('updated Record persists', async function() {
+      request.searchClause.where.RecordID = 2;
+      await m.getOneRecord(request, response);
+      const data = response._getJSONData();
+      assert.strictEqual(data.RecordID, 2);
+      assert.strictEqual(data.Amount, 1);
+      assert.strictEqual(data.Comment, 'New comment');
     });
   });
 });
