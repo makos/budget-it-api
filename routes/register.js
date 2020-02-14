@@ -7,6 +7,7 @@ router.post(
     auth.checkBodyPopulated,
     auth.checkPassword,
     auth.checkIfUserExists,
+    auth.hashPassword,
     auth.createNewUser,
 );
 

@@ -40,7 +40,7 @@ const checkPassword = function(req, res, next) {
 };
 
 const checkIfUserExists = function(req, res, next) {
-  models.User.findByPk(req.body.username).then((user) => {
+  return models.User.findByPk(req.body.username).then((user) => {
     if (user) {
       res.status(400).json({
         'Error': `User ${req.body.username} already exists.`,
@@ -51,20 +51,27 @@ const checkIfUserExists = function(req, res, next) {
   });
 };
 
-const createNewUser = function(req, res) {
+const hashPassword = function(req, res, next) {
   bcrypt.genSalt(16, function(err, salt) {
-    bcrypt.hash(req.body.password, salt, function(err, hash) {
+    bcrypt.hash(req.body.passwrod, salt, function(err, hash) {
       if (err) {
-        return res.status(500).json({'Error': err});
+        return res.status(400).json(err);
       } else {
-        models.User.create({
-          Name: req.body.username,
-          Password: hash,
-        }).then((user) => {
-          return res.status(200).json({'Created': user});
-        });
-      }
+        req.passwordHash = hash;
+        next();
+      };
     });
+  });
+};
+
+const createNewUser = function(req, res) {
+  return models.User.create({
+    Name: req.body.username,
+    Password: req.passwordHash,
+  }).then((user) => {
+    return res.status(200).json({'Created': user});
+  }, (err) => {
+    return res.status(500).json(err);
   });
 };
 
@@ -92,4 +99,5 @@ module.exports = {
   checkPassword,
   createNewUser,
   loginUser,
+  hashPassword,
 };
