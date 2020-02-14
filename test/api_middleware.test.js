@@ -6,7 +6,7 @@ const noop = function() {
   return;
 };
 
-describe('Middleware functions for /api routes', function() {
+describe('API middleware for requests & responses', function() {
   before(function() {
     request = httpMocks.createRequest({
       method: 'GET',
@@ -59,6 +59,12 @@ describe('Middleware functions for /api routes', function() {
     assert.strictEqual(request.searchClause.where.RecordID, 25);
   });
 
+  it('sets req.searchClause.where.UserName appropriately', function() {
+    request.user = 'testuser';
+    m.setUser(request, response, noop);
+    assert.strictEqual(request.searchClause.where.UserName, 'testuser');
+  });
+
   it('fails setting req.searchClause.limit with wrong input', function() {
     request.query.limit = 'notanint';
     m.setLimit(request, response, noop);
@@ -92,3 +98,4 @@ describe('Middleware functions for /api routes', function() {
     assert.ok(data.Error);
   });
 });
+

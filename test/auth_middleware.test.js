@@ -75,6 +75,13 @@ describe('Login & registration middleware functions', function() {
     assert.ok(data.Error);
   });
 
+  it('fails without Authorization header', function() {
+    ma.checkToken(httpMocks.createRequest(), response, noop);
+    assert.strictEqual(response.statusCode, 401);
+    const data = response._getJSONData();
+    assert.ok(data.Error);
+  });
+
   it('fails without username or password in req.body', function() {
     ma.checkBodyPopulated(badRequest, response, () => {
       assert.ok(false);
