@@ -53,7 +53,7 @@ const checkIfUserExists = function(req, res, next) {
 
 const hashPassword = function(req, res, next) {
   bcrypt.genSalt(16, function(err, salt) {
-    bcrypt.hash(req.body.passwrod, salt, function(err, hash) {
+    bcrypt.hash(req.body.password, salt, function(err, hash) {
       if (err) {
         return res.status(400).json(err);
       } else {

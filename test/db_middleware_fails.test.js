@@ -48,7 +48,6 @@ describe('Database middleware - failures', function() {
           request.body.amount = 1;
           request.user = 'makos';
           await m.postRecord(request, response);
-          const data = response._getJSONData();
           assert.strictEqual(response.statusCode, 500);
         });
   });
@@ -58,7 +57,6 @@ describe('Database middleware - failures', function() {
         'returns code 500 and error message when DB is not present',
         async function() {
           await m.deleteRecord(request, response);
-          const data = response._getJSONData();
           assert.strictEqual(response.statusCode, 500);
         });
   });
@@ -68,7 +66,6 @@ describe('Database middleware - failures', function() {
         'returns code 500 and error message when DB is not present',
         async function() {
           await m.putRecord(request, response);
-          const data = response._getJSONData();
           assert.strictEqual(response.statusCode, 500);
         });
   });

@@ -105,4 +105,16 @@ describe('Authorization middleware', function() {
       assert.ok(data.Error);
     });
   });
+
+  describe('#hashPassword', function() {
+    it('hashes the password correctly', function(done) {
+      bcrypt = require('bcryptjs');
+
+      request.body.password = 'stuff';
+      ma.hashPassword(request, response, () => {
+        assert.ok(bcrypt.compareSync('stuff', request.passwordHash));
+        done();
+      });
+    });
+  });
 });

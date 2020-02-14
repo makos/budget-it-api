@@ -1,4 +1,3 @@
-const models = require('../models');
 const assert = require('assert');
 const httpMocks = require('node-mocks-http');
 const m = require('../utils/api_middleware');
@@ -73,7 +72,6 @@ describe('Database middleware - success', function() {
     it('returns 404 when RecordID is not found', async function() {
       request.searchClause.where.RecordID = 1000;
       await m.deleteRecord(request, response);
-      const data = response._getJSONData();
       assert.strictEqual(response.statusCode, 404);
     });
   });
@@ -118,7 +116,6 @@ describe('Database middleware - success', function() {
       const data = response._getJSONData();
       assert.ok(data.Error);
     });
-
   });
 
   describe('#createNewUser', function() {

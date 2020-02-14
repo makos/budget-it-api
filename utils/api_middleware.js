@@ -137,14 +137,14 @@ const deleteRecord = function(req, res) {
 
 const putRecord = function(req, res) {
   return models.Record.findOne(req.searchClause).then((record) => {
-      return record.update({
-        Amount: req.body.amount || record.Amount,
-        Date: req.body.date || record.Date,
-        Type: req.body.type || record.Type,
-        Comment: req.body.comment || record.Comment,
-      }).then(() => {
-        return res.status(200).json({'Updated': record});
-      });
+    return record.update({
+      Amount: req.body.amount || record.Amount,
+      Date: req.body.date || record.Date,
+      Type: req.body.type || record.Type,
+      Comment: req.body.comment || record.Comment,
+    }).then(() => {
+      return res.status(200).json({'Updated': record});
+    });
   }, (err) => {
     return res.status(500).json(err);
   });
