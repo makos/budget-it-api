@@ -4,10 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "pretest": "NODE_ENV=test npx sequelize db:migrate; NODE_ENV=test npx sequelize db:seed:all",
-    "test": "NODE_ENV=test npx mocha || true",
-    "posttest": "NODE_ENV=test npx sequelize db:seed:undo:all; NODE_ENV=test npx sequelize db:migrate:undo:all",
-    "testcov": "rm -f ./testdb.sqlite3; NODE_ENV=test npx nyc mocha"
+    "test": "./scripts/test.sh"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
