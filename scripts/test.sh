@@ -37,7 +37,7 @@ then
     ./scripts/pretest.sh $BELOUD
 fi
 
-NODE_ENV=test $SWITCH npx mocha $FILES
+NODE_ENV=test $SWITCH npx mocha $FILES --timeout 20000
 
 if [ "$DBFLAG" = true ]
 then

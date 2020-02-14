@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "test": "./scripts/test.sh"
+    "test": "./scripts/test.sh",
+    "lint": "./scripts/lint.sh"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
