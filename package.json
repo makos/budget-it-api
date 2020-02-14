@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
+    "pretest": "rm ./testdb.sqlite3",
     "test": "NODE_ENV=test npx mocha",
-    "testcov": "NODE_ENV=test npx nyc mocha"
+    "testcov": "rm ./testdb.sqlite3; NODE_ENV=test npx nyc mocha"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
