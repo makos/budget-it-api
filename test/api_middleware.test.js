@@ -45,12 +45,12 @@ describe('API middleware for requests & responses', function() {
       m.setRecordType(requestEmptyIncome, response, noop);
       m.setRecordType(requestEmptyExpenses, response, noop);
       assert.strictEqual(
-        requestEmptyIncome.searchClause.where.RecordType,
-        'Income'
+          requestEmptyIncome.searchClause.where.RecordType,
+          'Income',
       );
       assert.strictEqual(
           requestEmptyExpenses.searchClause.where.RecordType,
-          'Expense'
+          'Expense',
       );
     });
   });

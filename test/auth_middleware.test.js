@@ -12,7 +12,7 @@ const noop = function() {
 const TESTUSER = 'testuser';
 const TESTPASS = 'testpass';
 
-describe('Login & registration middleware functions', function() {
+describe('Authorization middleware', function() {
   before(function() {
     const token = jwt.sign({loggedInAs: TESTUSER}, config.secret);
     requestJwt = httpMocks.createRequest({

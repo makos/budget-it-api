@@ -57,10 +57,10 @@ const setDateRange = function(req, res, next) {
 };
 
 const getAllRecords = function(req, res) {
-  models.Record.findAll(req.searchClause).then((records) => {
+  return models.Record.findAll(req.searchClause).then((records) => {
     if (!records) {
-      return res.status(404).json({
-        'Error (getAllRecords)': 'No data in database.',
+      return res.status(500).json({
+        'Error (getAllRecords)': 'Database error.',
       });
     } else {
       return res.status(200).json(records);
@@ -69,7 +69,7 @@ const getAllRecords = function(req, res) {
 };
 
 const getOneRecord = function(req, res) {
-  models.Record.findOne(req.searchClause).then((record) => {
+  return models.Record.findOne(req.searchClause).then((record) => {
     if (!record) {
       return res.status(404).json({
         'Error': `Record ID ${req.searchClause.where.RecordID} doesn't exist.`,
@@ -99,7 +99,7 @@ const postRecord = function(req, res) {
       req.body.date = new Date();
     }
 
-    models.Record.create({
+    return models.Record.create({
       Amount: req.body.amount,
       Date: req.body.date,
       Type: req.body.type,
@@ -107,12 +107,12 @@ const postRecord = function(req, res) {
       RecordType: req.searchClause.where.RecordType,
       UserName: req.user,
     }).then((record) => {
-      res.status(200).json({'Created': record});
+      return res.status(200).json({'Created': record});
     }, (err) => {
-      res.status(500).json({'Error (postRecord)': err});
+      return res.status(500).json({'Error (postRecord)': err});
     });
   } else {
-    res.status(400).json({
+    return res.status(400).json({
       'Error': 'Bad request: missing Amount (decimal number) field.',
     });
   }
@@ -120,7 +120,7 @@ const postRecord = function(req, res) {
 
 // setId() must be called before this middleware.
 const deleteRecord = function(req, res) {
-  models.Record.findOne(req.searchClause).then((record) => {
+  return models.Record.findOne(req.searchClause).then((record) => {
     if (record) {
       record.destroy();
       return res.status(200).json({'Deleted': record});
