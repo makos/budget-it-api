@@ -9,13 +9,13 @@ module.exports = {
     return queryInterface.bulkInsert('Users', [{
       Name: 'makos',
       Password: pass1,
-      CreatedAt: new Date(),
-      UpdatedAt: new Date(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
     }, {
       Name: 'notroot',
       Password: pass2,
-      CreatedAt: new Date(),
-      UpdatedAt: new Date(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
     }]);
   },
 
