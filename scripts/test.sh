@@ -37,6 +37,12 @@ then
     ./scripts/pretest.sh $BELOUD
 fi
 
+echo "Usage: npm test -- [OPTIONS]
+Custom test script, possible command-line options:
+- cov: enable code coverage output
+- db: do database tests only (don't mix with 'all')
+- all: do all tests (including DB)
+- loud: print out databse preparation messages"
 NODE_ENV=test $SWITCH npx mocha $FILES --timeout 20000
 
 if [ "$DBFLAG" = true ]
