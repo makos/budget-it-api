@@ -48,13 +48,13 @@ Node.js + Express + Sequelize ORM + MariaDB
 * `/api/register` allows user account creation, and it only allows one method
   * `POST` to create a new user, only if the username is unique; it must be a
     JSON body request with following keys
-    ** `username`
-    ** `password` - at least 8 characters long
+    * `username`
+    * `password` - at least 8 characters long
 * `/api/login` allows to retrieve a [JSON Web Token](https://jwt.io/), only if
   proper user credentials are sent via a JSON body request; this endpoint also
   only supports POST methods with following keys:
-    ** `username`
-    ** `password`
+  * `username`
+  * `password`
 
 ## Authorization
 As noted above, authorization is done by means of JSON Web Tokens (JWT). After
@@ -71,5 +71,6 @@ Without proper JWT, clients won't be able to use those endpoints.
 
 ## Credits
 
-Created by Mateusz Makowski <matmakos[at]gmail.com>
-License ??? not specified yet (c) 2020
+Created by Mateusz Makowski
+
+License ??? not decided yet (c) 2020
