@@ -4,8 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-const incomeRouter = require('./routes/api/income');
-const expensesRouter = require('./routes/api/expenses');
+const recordsRouter = require('./routes/api/records');
 const loginRouter = require('./routes/api/login');
 const registerRouter = require('./routes/api/register');
 
@@ -17,8 +16,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/api/income', incomeRouter);
-app.use('/api/expenses', expensesRouter);
+app.use(['/api/income', '/api/expenses'], recordsRouter);
 app.use('/api/login', loginRouter);
 app.use('/api/register', registerRouter);
 
