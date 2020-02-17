@@ -69,7 +69,7 @@ const createNewUser = function(req, res) {
     Name: req.body.username,
     Password: req.passwordHash,
   }).then((user) => {
-    return res.status(200).json({'Created': user});
+    return res.status(200).json({'Success': 'Created new user.'});
   }, (err) => {
     return res.status(500).json(err);
   });
