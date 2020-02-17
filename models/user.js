@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-  }, {timestamps: true});
+  });
   User.associate = function(models) {
     User.hasMany(models.Record, {foreignKey: 'UserName'});
   };

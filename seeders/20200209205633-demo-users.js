@@ -3,8 +3,8 @@ const bcrypt = require('bcryptjs');
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    const pass1 = bcrypt.hashSync('strongpass', 16);
-    const pass2 = bcrypt.hashSync('ezpz', 16);
+    const pass1 = bcrypt.hashSync('strongpass', 10);
+    const pass2 = bcrypt.hashSync('ezpz', 10);
 
     return queryInterface.bulkInsert('Users', [{
       Name: 'makos',

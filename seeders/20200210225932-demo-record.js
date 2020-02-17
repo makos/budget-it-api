@@ -9,6 +9,8 @@ module.exports = {
       Comment: 'McDonald\'s',
       RecordType: 'Expense',
       UserName: 'makos',
+      createdAt: new Date(),
+      updatedAt: new Date(),
     }, {
       Amount: 99.9,
       Date: new Date(),
@@ -16,6 +18,8 @@ module.exports = {
       Comment: 'Hosting',
       RecordType: 'Expense',
       UserName: 'notroot',
+      createdAt: new Date(),
+      updatedAt: new Date(),
     }, {
       Amount: 199.9,
       Date: new Date(),
@@ -23,6 +27,8 @@ module.exports = {
       Comment: '',
       RecordType: 'Income',
       UserName: 'makos',
+      createdAt: new Date(),
+      updatedAt: new Date(),
     }]);
   },
 

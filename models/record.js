@@ -36,8 +36,6 @@ module.exports = (sequelize, DataTypes) => {
         key: 'ID',
       },
     },
-  }, {
-    timestamps: false,
   });
   Record.associate = function(models) {
     Record.belongsTo(models.User, {foreignKey: 'UserName'});
