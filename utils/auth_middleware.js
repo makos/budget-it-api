@@ -75,20 +75,20 @@ const createNewUser = function(req, res) {
   });
 };
 
-const loginUser = function(req, res, next) {
-  models.User.findByPk(req.body.username).then((user) => {
-    if (user) {
-      bcrypt.compare(req.body.password, user.Password, function(err, login) {
-        if (login) {
-          const token = jwt.sign({loggedInAs: user.Name}, config.secret, {
-            expiresIn: config.jwtExp,
-          });
-          return res.status(200).json(token);
-        } else {
-          return res.status(400).json({'Error': 'Wrong username or password.'});
-        }
-      });
-    }
+const loginUser = function(req, res) {
+  return models.User.findByPk(req.body.username).then((user) => {
+    return bcrypt.compare(req.body.password, user.Password, function(err, login) {
+      if (login) {
+        const token = jwt.sign({loggedInAs: user.Name}, config.secret, {
+          expiresIn: config.jwtExp,
+        });
+        return res.status(200).json(token);
+      } else {
+        return res.status(400).json(err);
+      }
+    });
+  }, (err) => {
+    return res.status(500).json(err);
   });
 };
 
