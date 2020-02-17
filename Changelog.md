@@ -7,7 +7,7 @@
   * `/api/expenses` show expense records (e.g. shopping)
   * `/api/login` provide credentials to receive a session JSON Web Token
   * `/api/register` send credentials and store them in DB to create a new user
-  * For a better explanation of possible options, see the Readme.md.
+  * For a better explanation of possible options, see the [Readme](./Readme.md).
 * Database schema and interactions working
 * Unit tests of all middleware functions (not all methods covered equally)
 
