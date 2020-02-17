@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../utils/auth_middleware');
+const auth = require('../../utils/auth_middleware');
 
 router.post('/', auth.checkBodyPopulated, auth.loginUser);
 

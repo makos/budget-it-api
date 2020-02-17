@@ -6,8 +6,8 @@ const logger = require('morgan');
 
 const incomeRouter = require('./routes/api/income');
 const expensesRouter = require('./routes/api/expenses');
-const loginRouter = require('./routes/login');
-const registerRouter = require('./routes/register');
+const loginRouter = require('./routes/api/login');
+const registerRouter = require('./routes/api/register');
 
 const app = express();
 
@@ -19,8 +19,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/income', incomeRouter);
 app.use('/api/expenses', expensesRouter);
-app.use('/login', loginRouter);
-app.use('/register', registerRouter);
+app.use('/api/login', loginRouter);
+app.use('/api/register', registerRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
