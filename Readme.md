@@ -39,6 +39,8 @@ Node.js + Express + Sequelize ORM + MariaDB
   * `?limit=[INTEGER]` to limit the amount of returned Records
   * `?dateFrom=[DATESTRING]&dateTo=[DATESTRING]` to display only Records between
     two specified dates (both inclusive); dates must be in `YYYY-MM-DD` format
+  * `?offset=[INTEGER]` to skip *n* Records; can be used with `limit` to do
+    pagination
 * `/api/income/:id` and `/api/expenses/:id` methods, where `:id` is an integer
   * `GET` to retrieve a single Record with given ID
   * `PUT` a JSON body with `application/json` header to update an existing
