@@ -141,4 +141,21 @@ describe('API middleware for requests & responses', function() {
       assert.ok(data.Error);
     });
   });
+
+  describe('#setOffset', function() {
+    it('sets req.searchClause.offset properly', function() {
+      request.query.offset = '10';
+      m.setOffset(request, response, noop);
+      assert.strictEqual(response.statusCode, 200);
+      assert.strictEqual(request.searchClause.offset, 10);
+    });
+
+    it('returns code 400 and error JSON when query is malformed', function() {
+      request.query.offset = 'asdf';
+      m.setOffset(request, response, noop);
+      assert.strictEqual(response.statusCode, 400);
+      const data = response._getJSONData();
+      assert.ok(data.Error);
+    });
+  });
 });

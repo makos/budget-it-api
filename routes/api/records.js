@@ -5,7 +5,7 @@ const auth = require('../../utils/auth_middleware');
 
 router.use(auth.checkToken, m.setRecordType, m.setUser);
 
-router.get('/', m.setLimit, m.setDateRange, m.getAllRecords);
+router.get('/', m.setOffset, m.setLimit, m.setDateRange, m.getAllRecords);
 
 router.get('/:id', m.setId, m.getOneRecord);
 

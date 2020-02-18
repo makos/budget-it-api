@@ -150,6 +150,20 @@ const putRecord = function(req, res) {
   });
 };
 
+const setOffset = function(req, res, next) {
+  if (req.query.offset) {
+    const num = parseInt(req.query.offset);
+    if (num) {
+      req.searchClause.offset = num;
+    } else {
+      return res.status(400).json({
+        'Error': `${req.query.offset} is not a number.`
+      });
+    }
+  }
+  next();
+}
+
 module.exports = {
   setRecordType,
   setLimit,
@@ -161,4 +175,5 @@ module.exports = {
   deleteRecord,
   putRecord,
   setUser,
+  setOffset,
 };
