@@ -62,9 +62,11 @@ describe('Database middleware - success', function() {
     });
 
     it('now getOneRecord returns empty JSON', async function() {
+      const debug = require('debug')('db_middleware.test.js:getOneRecord');
       request.searchClause.where.RecordID = 1;
       await m.getOneRecord(request, response);
       const data = response._getJSONData();
+      debug(data);
       assert.strictEqual(response.statusCode, 200);
       assert.ok(!data);
     });
@@ -120,12 +122,13 @@ describe('Database middleware - success', function() {
 
   describe('#createNewUser', function() {
     it('creates new user in the DB with proper name and ID', async function() {
+      const debug = require('debug')('db_middleware.test.js:createNewUser');
       request.body.username = 'newuser';
       request.passwordHash = 'goodpass';
       await ma.createNewUser(request, response);
       const data = response._getJSONData();
-      assert.strictEqual(data.Created.Name, 'newuser');
-      assert.strictEqual(data.Created.Password, 'goodpass');
+      debug(data);
+      assert.ok(data.Success);
       assert.strictEqual(response.statusCode, 200);
     });
   });
