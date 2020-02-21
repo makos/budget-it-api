@@ -7,7 +7,7 @@ describe('Database middleware - success', function() {
   beforeEach(function() {
     request = httpMocks.createRequest({
       method: 'GET',
-      url: '/api/expenses',
+      url: '/api/v1/expenses',
       searchClause: {
         where: {
           RecordType: 'Expense',

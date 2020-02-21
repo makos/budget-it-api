@@ -3,9 +3,9 @@ const models = require('../models');
 
 const setRecordType = function(req, res, next) {
   req.searchClause = {};
-  if (req.baseUrl == '/api/income') {
+  if (req.baseUrl == '/api/v1/income') {
     req.searchClause.where = {RecordType: 'Income'};
-  } else if (req.baseUrl == '/api/expenses') {
+  } else if (req.baseUrl == '/api/v1/expenses') {
     req.searchClause.where = {RecordType: 'Expense'};
   }
 

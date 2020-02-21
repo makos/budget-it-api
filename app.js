@@ -13,9 +13,9 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(cors());
 
-app.use(['/api/income', '/api/expenses'], recordsRouter);
-app.use('/api/login', loginRouter);
-app.use('/api/register', registerRouter);
+app.use(['/api/v1/income', '/api/v1/expenses'], recordsRouter);
+app.use('/api/v1/login', loginRouter);
+app.use('/api/v1/register', registerRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

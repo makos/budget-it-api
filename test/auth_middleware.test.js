@@ -17,7 +17,7 @@ describe('Authorization middleware', function() {
     const token = jwt.sign({loggedInAs: TESTUSER}, config.secret);
     requestJwt = httpMocks.createRequest({
       method: 'POST',
-      url: '/login',
+      url: '/api/v1/login',
       headers: {
         'Authorization': 'Bearer ' + token,
       },
@@ -31,7 +31,7 @@ describe('Authorization middleware', function() {
 
     badRequest = httpMocks.createRequest({
       method: 'POST',
-      url: '/login',
+      url: '/api/v1/login',
       headers: {
         'Authorization': 'Bearer ' + badToken,
       },

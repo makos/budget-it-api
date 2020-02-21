@@ -11,11 +11,11 @@ describe('API middleware for requests & responses', function() {
     // request objects without searchClause defined, for setRecordType.
     requestEmptyExpenses = httpMocks.createRequest({
       method: 'GET',
-      url: '/api/expenses',
+      url: '/api/v1/expenses',
     });
     requestEmptyIncome = httpMocks.createRequest({
       method: 'GET',
-      url: '/api/income',
+      url: '/api/v1/income',
     });
 
     response = httpMocks.createResponse();
@@ -26,7 +26,7 @@ describe('API middleware for requests & responses', function() {
     // except for setRecordType() which actually sets it.
     request = httpMocks.createRequest({
       method: 'GET',
-      url: '/api/income',
+      url: '/api/v1/income',
       searchClause: {
         where: {},
       },
