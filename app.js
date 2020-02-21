@@ -5,11 +5,13 @@ const logger = require('morgan');
 const recordsRouter = require('./routes/api/records');
 const loginRouter = require('./routes/api/login');
 const registerRouter = require('./routes/api/register');
+const cors = require('cors');
 
 const app = express();
 
 app.use(logger('dev'));
 app.use(express.json());
+app.use(cors());
 
 app.use(['/api/income', '/api/expenses'], recordsRouter);
 app.use('/api/login', loginRouter);
