@@ -23,7 +23,7 @@ Node.js + Express + Sequelize ORM + MariaDB
     * `createdAt` and `updatedAt` are automatically managed by Sequelize
 
 ## API endpoints
-* `/api/income` and `/api/expenses` methods
+* `/api/v1/income` and `/api/v1/expenses` methods
   * `GET` returns all existing Records for current user
   * `POST` a JSON body with `application/json` header to create a new Record
     entry, with provided keys:
@@ -35,24 +35,24 @@ Node.js + Express + Sequelize ORM + MariaDB
       '' (empty string)
     * `comment` (optional): user remarks about this transaction, if empty
       defaults to '' (empty string)
-* `/api/income` and `/api/expenses` query parameters
+* `/api/v1/income` and `/api/v1/expenses` query parameters
   * `?limit=[INTEGER]` to limit the amount of returned Records
   * `?dateFrom=[DATESTRING]&dateTo=[DATESTRING]` to display only Records between
     two specified dates (both inclusive); dates must be in `YYYY-MM-DD` format
   * `?offset=[INTEGER]` to skip *n* Records; can be used with `limit` to do
     pagination
-* `/api/income/:id` and `/api/expenses/:id` methods, where `:id` is an integer
+* `/api/v1/income/:id` and `/api/v1/expenses/:id` methods, where `:id` is an integer
   * `GET` to retrieve a single Record with given ID
   * `PUT` a JSON body with `application/json` header to update an existing
     Record entry; it allows the same key-value pairs as `POST`
   * `DELETE` to remove the specified Record entry; 
     **there is no undo function on the API level!**
-* `/api/register` allows user account creation, and it only allows one method
+* `/api/v1/register` allows user account creation, and it only allows one method
   * `POST` to create a new user, only if the username is unique; it must be a
     JSON body request with following keys
     * `username`
     * `password` - at least 8 characters long
-* `/api/login` allows to retrieve a [JSON Web Token](https://jwt.io/), only if
+* `/api/v1/login` allows to retrieve a [JSON Web Token](https://jwt.io/), only if
   proper user credentials are sent via a JSON body request; this endpoint also
   only supports POST methods with following keys:
   * `username`
@@ -60,10 +60,10 @@ Node.js + Express + Sequelize ORM + MariaDB
 
 ## Authorization
 As noted above, authorization is done by means of JSON Web Tokens (JWT). After
-registering, client sends a `POST` request to `/api/login` with proper
+registering, client sends a `POST` request to `/api/v1/login` with proper
 credentials, and receives an encoded JW token. To succesfully use it, clients
-need to add the following header to every request made to `/api/income` or
-`/api/expenses` endpoints:
+need to add the following header to every request made to `/api/v1/income` or
+`/api/v1/expenses` endpoints:
 
 ```
 Authorization:Bearer <JSON Web Token goes here>
